@@ -12,14 +12,14 @@ if [ ! -z "$3" ]; then
     fi
 fi
 
-HOST=${1:-localhost} # default server is the localhost
-PORT=${2:-27017}     # default port for MongoDB is 27017
+DIR=${1:-data}       # default directory is data
+HOST=${2:-localhost} # default server is the localhost
+PORT=${3:-27017}     # default port for MongoDB is 27017
 
-for directory in *; do
-    if [ -d "${directory}" ] ; then
-        echo "$directory"
-        for data_file in $directory/*; do
-            mongoimport --drop --host $HOST --port $PORT --db "$directory" --collection "$(basename $data_file .json)" --file $data_file $auth
-        done
-    fi
-done
+directory=$DIR
+if [ -d "${directory}" ] ; then
+    echo "$directory"
+    for data_file in $directory/*; do
+        mongoimport --drop --host $HOST --port $PORT --db "$directory" --collection "$(basename $data_file .json)" --file $data_file $auth
+    done
+fi
